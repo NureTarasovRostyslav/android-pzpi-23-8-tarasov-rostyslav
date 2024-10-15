@@ -1,8 +1,7 @@
-package com.nure_ua_tarasov.practtask1;
+package com.nure_ua_tarasov.practice1;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -24,13 +23,15 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        findViewById(R.id.add1_button).setOnClickListener(this::add1);
+        findViewById(R.id.add_to_counter_btn).setOnClickListener(this::add1);
     }
 
-    public void add1(View view) {
-        TextView tv = findViewById(R.id.counter_textView);
+    private void add1(View view) {
+        TextView tv = findViewById(R.id.text_view_counter);
 
         counter++;
         tv.setText(String.valueOf(counter));
     }
+
+
 }
