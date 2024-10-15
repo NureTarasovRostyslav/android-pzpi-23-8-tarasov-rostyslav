@@ -5,20 +5,11 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <EditText
-        android:id="@+id/edit_text_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="50dp"
-        android:autofillHints="Some text"
-        android:hint="Some text" />
+    tools:context=".additional_activity">
 
     <Button
-        android:id="@+id/next_act_button"
+        android:id="@+id/previous_activity_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next" />
-
+        android:text="Close" />
 </RelativeLayout>
