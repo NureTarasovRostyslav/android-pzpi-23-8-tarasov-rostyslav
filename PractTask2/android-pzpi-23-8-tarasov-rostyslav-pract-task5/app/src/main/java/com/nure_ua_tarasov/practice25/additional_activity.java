@@ -3,15 +3,22 @@ package com.nure_ua_tarasov.practice25;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class additional_activity extends AppCompatActivity {
+import java.util.Objects;
 
+public class additional_activity extends AppCompatActivity {
+    private int counter = 0;
+    private int[] ids_to_save = {
+            R.id.counter_view
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,10 +30,19 @@ public class additional_activity extends AppCompatActivity {
             return insets;
         });
 
-        findViewById(R.id.previous_activity_button).setOnClickListener(this::previos_activity);
+        findViewById(R.id.previous_activity_button).setOnClickListener(this::previous_activity);
+        findViewById(R.id.click_counter).setOnClickListener(this::add1);
     }
 
-    private void previos_activity(View view) {
+    private void add1(View view) {
+        counter++;
+
+        TextView counter_view = findViewById(R.id.counter_view);
+        counter_view.setText(String.valueOf(counter));
+
+    }
+
+    private void previous_activity(View view) {
         finish();
     }
     @Override
@@ -63,5 +79,29 @@ public class additional_activity extends AppCompatActivity {
     protected void onRestart() {
         Log.d("onRestart", "onRestart execution " + this.getLocalClassName());
         super.onRestart();
+    }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        for (int id : ids_to_save) {
+            View view = findViewById(id);
+            if (view instanceof TextView) {
+                outState.putString(String.valueOf(id), ((TextView) view).getText().toString());
+            }
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        for (int id : ids_to_save) {
+            View view = findViewById(id);
+            if (view instanceof TextView) {
+                ((TextView) view).setText(savedInstanceState.getString(String.valueOf(id)));
+            }
+        }
+
+        counter = Integer.parseInt(Objects.requireNonNull(savedInstanceState.getString(String.valueOf(R.id.counter_view))));
     }
 }

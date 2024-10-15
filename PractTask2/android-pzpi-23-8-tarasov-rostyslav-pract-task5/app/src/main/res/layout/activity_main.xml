@@ -21,4 +21,12 @@
         android:layout_height="wrap_content"
         android:text="Next" />
 
+    <TextView
+        android:id="@+id/timer_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="0"
+        android:textSize="50sp" />
+
 </RelativeLayout>

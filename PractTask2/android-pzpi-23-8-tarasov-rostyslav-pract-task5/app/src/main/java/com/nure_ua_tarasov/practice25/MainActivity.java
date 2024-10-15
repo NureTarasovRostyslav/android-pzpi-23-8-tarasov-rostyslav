@@ -1,8 +1,11 @@
 package com.nure_ua_tarasov.practice25;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -19,6 +22,28 @@ public class MainActivity extends AppCompatActivity {
     private final int[] ids_to_save = {
             R.id.edit_text_1
     };
+
+    private TextView timerTextView;
+    private Handler handler = new Handler();
+    private long startTime = 0L;
+    private long elapsedTime = 0L;
+
+    private Runnable updateTimerThread = new Runnable() {
+        public void run() {
+            long currentTime = SystemClock.uptimeMillis() - startTime;
+            long totalElapsedTime = elapsedTime + currentTime;
+
+            int secs = (int) (totalElapsedTime / 1000);
+            int mins = secs / 60;
+            secs = secs % 60;
+            int milliseconds = (int) (totalElapsedTime % 1000);
+
+            timerTextView.setText(String.format("%02d:%02d:%03d", mins, secs, milliseconds));
+
+            handler.postDelayed(this, 10);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("onCreate", "onCreate execution");
@@ -30,9 +55,14 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
         findViewById(R.id.next_act_button).setOnClickListener(this::nextActivity);
+        timerTextView = findViewById(R.id.timer_view);
+
+        if (savedInstanceState != null) {
+            elapsedTime = savedInstanceState.getLong("elapsedTime");
+        }
     }
+
 
     private void nextActivity(View view) {
         Intent next_activity = new Intent(this, additional_activity.class);
@@ -49,12 +79,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         Log.d("onResume", "onResume execution " + this.getLocalClassName());
         super.onResume();
+        startTime = SystemClock.uptimeMillis();
+        handler.post(updateTimerThread);
     }
 
     @Override
     protected void onPause() {
         Log.d("onPause", "onPause execution " + this.getLocalClassName());
         super.onPause();
+        elapsedTime += SystemClock.uptimeMillis() - startTime;
+        handler.removeCallbacks(updateTimerThread);
     }
 
     @Override
@@ -78,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putLong("elapsedTime", elapsedTime);
         for (int id : ids_to_save) {
             View view = findViewById(id);
             if (view instanceof EditText) {
