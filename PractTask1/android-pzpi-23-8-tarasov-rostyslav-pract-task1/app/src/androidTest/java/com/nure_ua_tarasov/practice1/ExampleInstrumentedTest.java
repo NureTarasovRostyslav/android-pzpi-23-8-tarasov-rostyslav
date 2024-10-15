@@ -1,4 +1,4 @@
-package com.nure_ua_tarasov.practtask1;
+package com.nure_ua_tarasov.practice1;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.nure_ua_tarasov.practtask1", appContext.getPackageName());
+        assertEquals("com.nure_ua_tarasov.practice1", appContext.getPackageName());
     }
 }

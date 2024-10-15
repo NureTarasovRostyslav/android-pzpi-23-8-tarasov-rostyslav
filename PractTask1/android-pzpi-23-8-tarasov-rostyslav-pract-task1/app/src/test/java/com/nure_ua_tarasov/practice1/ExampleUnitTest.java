@@ -1,4 +1,4 @@
-package com.nure_ua_tarasov.practtask1;
+package com.nure_ua_tarasov.practice1;
 
 import org.junit.Test;
 
