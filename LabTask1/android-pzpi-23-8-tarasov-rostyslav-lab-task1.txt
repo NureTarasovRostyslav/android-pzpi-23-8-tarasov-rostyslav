@@ -48,73 +48,81 @@
 
      Додаток А
 Вихідний код activity_main.xml
-       <?xml version="1.0" encoding="utf-8"?>
-       <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-           xmlns:app="http://schemas.android.com/apk/res-auto"
-           xmlns:tools="http://schemas.android.com/tools"
-           android:id="@+id/main"
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:gravity="center"
-           tools:context=".MainActivity">
-       
-           <TextView
-               android:id="@+id/text_task_1"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="Task 1"
-               android:textSize="80sp"/>
-       
-       </LinearLayout>
+       1 <?xml version="1.0" encoding="utf-8"?>
+       2 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+       3     xmlns:app="http://schemas.android.com/apk/res-auto"
+       4     xmlns:tools="http://schemas.android.com/tools"
+       5     android:id="@+id/main"
+       6     android:layout_width="match_parent"
+       7     android:layout_height="match_parent"
+       8     android:gravity="center"
+       9     tools:context=".MainActivity">
+       10 
+       11     <TextView
+       12         android:id="@+id/text_task_1"
+       13         android:layout_width="wrap_content"
+       14         android:layout_height="wrap_content"
+       15         android:text="Task 1"
+       16         android:textSize="80sp"/>
+       17 
+       18 </LinearLayout>
+       19
 
 
      Додаток Б
 вихідний код MainActivity.java
-       public class MainActivity extends AppCompatActivity {
-       
-           @Override
-           protected void onCreate(Bundle savedInstanceState) {
-               Log.d("Life cycle", "onCreate");
-               super.onCreate(savedInstanceState);
-               EdgeToEdge.enable(this);
-               setContentView(R.layout.activity_main);
-               ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-                   Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-                   v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-                   return insets;
-               });
-           }
-           protected void onStart() {
-               super.onStart();
-               Log.d("Life cycle", "onStart");
-           }
-       
-           protected void onPause() {
-               super.onPause();
-               Log.d("Life cycle", "onPause");
-           }
-       
-           protected void onResume() {
-               super.onResume();
-               Log.d("Life cycle", "onResume");
-           }
-       
-           protected void onRestart() {
-               super.onRestart();
-               Log.d("Life cycle", "onRestart");
-           }
-       
-           protected void onStop() {
-               super.onStop();
-               Log.d("Life cycle", "onStop");
-           }
-       
-           protected void onDestroy() {
-               super.onDestroy();
-               Log.d("Life cycle", "onDestroy");
-           }
-       
-       }
+       1 public class MainActivity extends AppCompatActivity {
+       2 
+       3     @Override
+       4     protected void onCreate(Bundle savedInstanceState) {
+       5         Log.d("Life cycle", "onCreate");
+       6         super.onCreate(savedInstanceState);
+       7         EdgeToEdge.enable(this);
+       8         setContentView(R.layout.activity_main);
+       9         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+       10             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+       11             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+       12             return insets;
+       13         });
+       14     }
+       15 
+       16     @Override
+       17     protected void onStart() {
+       18         super.onStart();
+       19         Log.d("Life cycle", "onStart");
+       20     }
+       21 
+       22     @Override
+       23     protected void onPause() {
+       24         super.onPause();
+       25         Log.d("Life cycle", "onPause");
+       26     }
+       27 
+       28     @Override
+       29     protected void onResume() {
+       30         super.onResume();
+       31         Log.d("Life cycle", "onResume");
+       32     }
+       33 
+       34     @Override
+       35     protected void onRestart() {
+       36         super.onRestart();
+       37         Log.d("Life cycle", "onRestart");
+       38     }
+       39 
+       40     @Override
+       41     protected void onStop() {
+       42         super.onStop();
+       43         Log.d("Life cycle", "onStop");
+       44     }
+       45 
+       46     @Override
+       47     protected void onDestroy() {
+       48         super.onDestroy();
+       49         Log.d("Life cycle", "onDestroy");
+       50     }
+       51 
+       52 }
 2
 
 
