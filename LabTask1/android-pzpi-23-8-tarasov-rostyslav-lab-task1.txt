@@ -1,0 +1,120 @@
+﻿МІНІСТЕРСТВО ОСВІТИ ТА НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ
+РАДІОЕЛЕКТРОНІКИ
+
+
+
+
+ЗВІТ
+Лабораторної роботи №1
+з дисципліни «Програмування під Android»
+на тему «Створення мінімального Android застосунку»
+
+
+Виконав:
+Тарасов Ростислав МаксимовичПеревірив:
+ст. викладач кафедри ПІ
+Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+Харків 2024
+
+1.1  Мета роботи
+     Встановити Android Studio та створити мінімальний застосунок для Android, в якому реалізувати усі базові методи життєвого циклу активностей і надпис «Task 1» у центрі екрану, використовуючи лінійну розмітку.
+     
+1.2  Хід роботи
+     Встановлюємо Android Studio 
+     Створюємо проект із шаблоном
+     Ознайомлюємось із структурою проекту
+     Підключаємо емулятор або (у моєму випадку) фізичний пристрій 
+     Запускаємо застосунок для перевірки успішності компіляції
+     Відкриваємо файл activity_main.xml який знаходиться в директорії res/layout/ і змінюємо constraintLayout на LinearLayout, а також деякі параметри, і додаємо gravity="center". В цю розмітку додаємо TextView з текстом «Task 1» (додаток А).
+     Далі відкриваємо MainActivity.java і реалізовуємо базові методи життєвого циклу активностей такі як: onCreate(), onStart(), onRestart(), onResume(), onPause(), onStop і onDestroy(). Також додаємо логування для відслідковування послідовність роботи цих методів (додаток Б).
+     
+1.3  Висновки
+     Посилання на відеозахист: 
+     У ході виконання роботи було успішно досягнуто поставленої мети. Було встановлено середовище розробки Android Studio, яке є основним інструментом для створення застосунків під операційну систему Android. В рамках роботи було створено мінімальний застосунок, у якому реалізовано всі базові методи життєвого циклу активностей. Це дозволило ознайомитися з основними етапами роботи активностей у застосунках Android, зокрема з методами onCreate(), onStart(), onResume(), onPause(), onStop(), onRestart() та onDestroy().
+     Крім того, у застосунку було використано лінійну розмітку (LinearLayout) для розміщення текстового надпису «Task 1» у центрі екрану. Це дало змогу закріпити навички роботи з XML-розміткою та основними компонентами інтерфейсу користувача в Android.
+     Таким чином, виконана робота дозволила отримати початкові практичні навички розробки застосунків для Android, а також розуміння основних принципів роботи активностей і їх життєвого циклу. Ці знання є фундаментальними для подальшого вивчення та розробки більш складних і функціональних застосунків під Android.
+
+
+
+
+     Додаток А
+Вихідний код activity_main.xml
+       <?xml version="1.0" encoding="utf-8"?>
+       <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:app="http://schemas.android.com/apk/res-auto"
+           xmlns:tools="http://schemas.android.com/tools"
+           android:id="@+id/main"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:gravity="center"
+           tools:context=".MainActivity">
+       
+           <TextView
+               android:id="@+id/text_task_1"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Task 1"
+               android:textSize="80sp"/>
+       
+       </LinearLayout>
+
+
+     Додаток Б
+вихідний код MainActivity.java
+       public class MainActivity extends AppCompatActivity {
+       
+           @Override
+           protected void onCreate(Bundle savedInstanceState) {
+               Log.d("Life cycle", "onCreate");
+               super.onCreate(savedInstanceState);
+               EdgeToEdge.enable(this);
+               setContentView(R.layout.activity_main);
+               ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+                   Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                   v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                   return insets;
+               });
+           }
+           protected void onStart() {
+               super.onStart();
+               Log.d("Life cycle", "onStart");
+           }
+       
+           protected void onPause() {
+               super.onPause();
+               Log.d("Life cycle", "onPause");
+           }
+       
+           protected void onResume() {
+               super.onResume();
+               Log.d("Life cycle", "onResume");
+           }
+       
+           protected void onRestart() {
+               super.onRestart();
+               Log.d("Life cycle", "onRestart");
+           }
+       
+           protected void onStop() {
+               super.onStop();
+               Log.d("Life cycle", "onStop");
+           }
+       
+           protected void onDestroy() {
+               super.onDestroy();
+               Log.d("Life cycle", "onDestroy");
+           }
+       
+       }
+2
+
+
