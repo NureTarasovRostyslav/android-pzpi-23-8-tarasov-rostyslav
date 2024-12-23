@@ -1,9 +1,13 @@
 package com.nure_ua_tarasov.android_pzpi_23_8_tarasov_rostyslav_lab_task3;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -19,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private double firstOperand;
     private double secondOperand;
     private boolean isNewOperation;
-
+    private final String TAG = "tag check";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        Log.d(TAG, "onRestoreInstanceState: restore");
         editText = findViewById(R.id.editText);
         currentOperator = "";
         isNewOperation = true;
@@ -117,11 +121,5 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return 0;
         }
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
     }
 }

@@ -30,19 +30,18 @@ public class additional_activity extends AppCompatActivity {
             return insets;
         });
 
-        findViewById(R.id.previous_activity_button).setOnClickListener(this::previous_activity);
+        findViewById(R.id.previous_activity_button).setOnClickListener(this::close_activity);
         findViewById(R.id.click_counter).setOnClickListener(this::add1);
     }
 
     private void add1(View view) {
         counter++;
-
         TextView counter_view = findViewById(R.id.counter_view);
         counter_view.setText(String.valueOf(counter));
 
     }
 
-    private void previous_activity(View view) {
+    private void close_activity(View view) {
         finish();
     }
     @Override

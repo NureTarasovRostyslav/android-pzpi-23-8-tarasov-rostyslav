@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textViewResult;
     private StringBuilder currentInput = new StringBuilder();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
             findViewById(id).setOnClickListener(this::onButtonClick);
         }
     }
+
     private void onButtonClick(View view) {
         Button button = (Button) view;
         String buttonText = button.getText().toString();
@@ -53,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
             textViewResult.setText(currentInput.toString());
         }
     }
-
     private void backspace() {
         if (currentInput.length() > 0) {
             currentInput.deleteCharAt(currentInput.length() - 1);
@@ -63,37 +64,31 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-
         super.onDestroy();
     }
 
     @Override
     protected void onRestart() {
-
         super.onRestart();
     }
 }
