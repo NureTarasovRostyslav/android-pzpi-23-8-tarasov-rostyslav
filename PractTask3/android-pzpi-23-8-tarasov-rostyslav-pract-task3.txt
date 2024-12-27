@@ -1,0 +1,276 @@
+﻿МІНІСТЕРСТВО ОСВІТИ ТА НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ
+РАДІОЕЛЕКТРОНІКИ
+
+
+
+
+ЗВІТ
+Практичної роботи №3
+з дисципліни «Програмування під Android»
+на тему «Діалогові панелі. Обробник черг повідомлень (Handler). Списки з прогортанням (RecyclerView Adapter)»
+
+
+Виконав:
+Тарасов Ростислав МаксимовичПеревірив:
+ст. викладач кафедри ПІ
+Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+Харків 2024
+
+1 
+2 
+2.1  Мета роботи:
+a) Ознайомитися з основними типами діалогових панелей в Android. Навчитися створювати та використовувати діалогові панелі в Android-застосунках. Засвоїти методи для налаштування діалогових панелей та їх взаємодії з користувачем
+b) Засвоїти концепцію черги повідомлень (Message Queue) в Android. Вивчити роботу з обробником повідомлень (Handler) для взаємодії з потоками.  Навчитися створювати та використовувати Handler для асинхронної обробки даних.
+     
+1.2  Завдання
+
+1.2.1 Огляд діалогових панелей в Android;
+1.2.2 Створення AlertDialog;
+1.2.3 Створення DatePickerDialog;
+1.2.4 Створення Custom Dialog;
+1.2.5 Створення простого прикладу з Handler;
+1.2.6 Взаємодія між потоками за допомогою Handler;
+1.2.7 Відправка повідомлень через Handler.
+
+1.3  Хід роботи
+Виконуємо завдання на dl.nure.ua по темам ПЗ 3. 
+В результаті отримуємо проєкт з 3 кнопками, які викликають різні діалогові вікна (додатки А і Б), і проєкт, в якому з плином часу змінюється текст (додатки В і Г).
+
+
+1.4  Висновки
+     Посилання на відеозахист: 
+     Під час практичного заняття ми ознайомилися з основними типами діалогових панелей в Android та навчилися створювати і використовувати їх у застосунках. Ми вивчили методи налаштування діалогових панелей та їх взаємодії з користувачем, що дозволяє створювати більш інтерактивні та зручні інтерфейси. Також ми засвоїли концепцію черги повідомлень (Message Queue) в Android і навчились використовувати обробник повідомлень (Handler) для взаємодії з потоками, що є важливим для асинхронної обробки даних. Нарешті, ми розглянули RecyclerView та RecyclerView.Adapter, які забезпечують потужний та гнучкий спосіб створення списків з прогортанням, що дозволяє ефективно управляти великими наборами даних і створювати складні інтерфейси користувача. Використання цих інструментів є необхідним для розробників, які прагнуть створювати сучасні та продуктивні мобільні застосунки.
+
+ДЖЕРЕЛА
+1. МЕТОДИЧНІ ВКАЗІВКИ ДО ПРАКТИЧНИХ ЗАНЯТЬ URL: https://dl.nure.ua/mod/page/view.php?id=599587
+
+
+     Додаток А
+Вихідний код activity_main.xml для діалогових вікон
+
+        1 <?xml version="1.0" encoding="utf-8"?>
+        2 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        3     xmlns:app="http://schemas.android.com/apk/res-auto"
+        4     xmlns:tools="http://schemas.android.com/tools"
+        5     android:id="@+id/main"
+        6     android:layout_width="match_parent"
+        7     android:layout_height="match_parent"
+        8     android:gravity="center"
+        9     android:orientation="vertical"
+        10     tools:context=".MainActivity">
+        11 
+        12     <Button
+        13         android:id="@+id/showDialogButton"
+        14         android:layout_width="wrap_content"
+        15         android:layout_height="wrap_content"
+        16         android:text="Show Dialog" />
+        17 
+        18     <Button
+        19         android:id="@+id/showDatePickerButton"
+        20         android:layout_width="wrap_content"
+        21         android:layout_height="wrap_content"
+        22         android:text="Show DatePicker" />
+        23 
+        24     <Button
+        25         android:id="@+id/showCustomDialogButton"
+        26         android:layout_width="wrap_content"
+        27         android:layout_height="wrap_content"
+        28         android:text="Show CustomDialogButton" />
+        29 </LinearLayout>
+
+
+     Додаток Б
+Вихідний код MainActivity.java для діалогових вікон
+     
+       1 package com.nure_ua_tarasov.labtask31;
+       2 
+       3 import android.app.DatePickerDialog;
+       4 import android.content.DialogInterface;
+       5 import android.os.Bundle;
+       6 import android.view.LayoutInflater;
+       7 import android.view.View;
+       8 import android.widget.Button;
+       9 import android.widget.DatePicker;
+       10 
+       11 import androidx.activity.EdgeToEdge;
+       12 import androidx.appcompat.app.AlertDialog;
+       13 import androidx.appcompat.app.AppCompatActivity;
+       14 import androidx.core.graphics.Insets;
+       15 import androidx.core.view.ViewCompat;
+       16 import androidx.core.view.WindowInsetsCompat;
+       17 
+       18 public class MainActivity extends AppCompatActivity {
+       19 
+       20     @Override
+       21     protected void onCreate(Bundle savedInstanceState) {
+       22         super.onCreate(savedInstanceState);
+       23         EdgeToEdge.enable(this);
+       24         setContentView(R.layout.activity_main);
+       25         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+       26             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+       27             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+       28             return insets;
+       29         });
+       30         setOnClickListeners();
+       31 
+       32     }
+       33 
+       34     private void setOnClickListeners() {
+       35         Button showDialogButton = findViewById(R.id.showDialogButton);
+       36         Button showDatePickerButton = findViewById(R.id.showDatePickerButton);
+       37         Button showCustomDialogButton = findViewById(R.id.showCustomDialogButton);
+       38 
+       39         showCustomDialogButton.setOnClickListener(v -> {
+       40             LayoutInflater inflater = getLayoutInflater();
+       41             View dialogView = inflater.inflate(R.layout.custom_dialog, null);
+       42 
+       43             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+       44             builder.setView(dialogView)
+       45                     .setPositiveButton("OK", (dialog, id) -> {
+       46                         // Обробка даних
+       47                     })
+       48                     .setNegativeButton("Cancel", (dialog, id) -> {
+       49                         // Закриття діалогу
+       50                     });
+       51             builder.create().show();
+       52         });
+       53         showDatePickerButton.setOnClickListener(v -> {
+       54             DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this,
+       55                     (view, year, month, dayOfMonth) -> {
+       56 
+       57                     }, 2023, 8, 1);
+       58             datePickerDialog.show();
+       59         });
+       60         showDialogButton.setOnClickListener(v -> new AlertDialog.Builder(MainActivity.this)
+       61                 .setTitle("Діалог")
+       62                 .setMessage("Це приклад AlertDialog.")
+       63                 .setPositiveButton("OK", (dialog, which) -> {
+       64                     // Дія при натисканні OK
+       65                 })
+       66                 .setNegativeButton("Cancel", (dialog, which) -> {
+       67                     // Дія при натисканні Cancel
+       68                 })
+       69                 .show());
+       70     }
+       71 
+       72 
+       73 }
+
+
+     Додаток В
+Вихідний код activity_main.xml для Handller
+     
+       1 <?xml version="1.0" encoding="utf-8"?>
+       2 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+       3     xmlns:app="http://schemas.android.com/apk/res-auto"
+       4     xmlns:tools="http://schemas.android.com/tools"
+       5     android:id="@+id/main"
+       6     android:layout_width="match_parent"
+       7     android:layout_height="match_parent"
+       8     tools:context=".MainActivity"
+       9     android:orientation="vertical"
+       10     android:gravity="center">
+       11 
+       12     <Button
+       13         android:id="@+id/startHandlerButton"
+       14         android:layout_width="wrap_content"
+       15         android:layout_height="wrap_content"
+       16         android:text="Start Handler" />
+       17 
+       18     <TextView
+       19         android:id="@+id/handlerMessageTextView"
+       20         android:layout_width="wrap_content"
+       21         android:layout_height="wrap_content"
+       22         android:text="Message will appear here"
+       23         android:layout_marginTop="20dp" />
+       24 
+       25 </LinearLayout>
+
+
+     Додаток Г
+Вихідний код MainActivity.java для діалогових вікон
+       1 package com.nure_ua_tarasov.labtask32;
+       2 
+       3 import android.os.Bundle;
+       4 import android.os.Handler;
+       5 import android.os.Looper;
+       6 import android.os.Message;
+       7 import android.view.View;
+       8 import android.widget.Button;
+       9 import android.widget.TextView;
+       10 
+       11 import androidx.activity.EdgeToEdge;
+       12 import androidx.appcompat.app.AppCompatActivity;
+       13 import androidx.core.graphics.Insets;
+       14 import androidx.core.view.ViewCompat;
+       15 import androidx.core.view.WindowInsetsCompat;
+       16 
+       17 public class MainActivity extends AppCompatActivity {
+       18 
+       19     @Override
+       20     protected void onCreate(Bundle savedInstanceState) {
+       21         super.onCreate(savedInstanceState);
+       22         EdgeToEdge.enable(this);
+       23         setContentView(R.layout.activity_main);
+       24         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+       25             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+       26             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+       27             return insets;
+       28         });
+       29         Handler handler = new Handler(Looper.getMainLooper());
+       30 
+       31         Button startHandlerButton = findViewById(R.id.startHandlerButton);
+       32         startHandlerButton.setOnClickListener(v -> handler.postDelayed(() -> {
+       33             TextView textView = findViewById(R.id.handlerMessageTextView);
+       34             textView.setText("Handler executed after delay");
+       35         }, 2000));
+       36         // Створюємо Handler для обробки повідомлень
+       37         Handler handler3 = new Handler(Looper.getMainLooper()) {
+       38             @Override
+       39             public void handleMessage(Message msg) {
+       40                 // Отримуємо повідомлення та оновлюємо інтерфейс
+       41                 TextView textView = findViewById(R.id.handlerMessageTextView);
+       42                 textView.setText("Message received: " + msg.what);
+       43             }
+       44         };
+       45 
+       46         new Thread(() -> {
+       47             try {
+       48                 Thread.sleep(3000);
+       49             } catch (InterruptedException e) {
+       50                 e.printStackTrace();
+       51             }
+       52             Message msg = handler.obtainMessage();
+       53             msg.what = 1;
+       54             handler3.sendMessage(msg);
+       55         }).start();
+       56 
+       57         Handler handler2 = new Handler(Looper.getMainLooper());
+       58 
+       59         new Thread(() -> {
+       60             try {
+       61                 Thread.sleep(2000);
+       62             } catch (InterruptedException e) {
+       63                 e.printStackTrace();
+       64             }
+       65 
+       66             handler2.post(() -> {
+       67                 TextView textView = findViewById(R.id.handlerMessageTextView);
+       68                 textView.setText("Updated from background thread");
+       69             });
+       70         }).start();
+       71 
+       72     }
+       73 }
+2
+
+
