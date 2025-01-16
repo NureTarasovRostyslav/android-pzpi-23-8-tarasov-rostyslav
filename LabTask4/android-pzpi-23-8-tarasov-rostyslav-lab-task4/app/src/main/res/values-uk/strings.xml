@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ukrainian (default) -->
+    <string name="app_name">Нотатки</string>
+    <string name="add_note">Додати нотатку</string>
+    <string name="note_image">Зображення нотатки</string>
+    <string name="priority_icon">Іконка пріоритету</string>
+    <string name="search_notes">Пошук нотаток</string>
+    <string name="filter_priority">Фільтр за важливістю</string>
+    <string name="edit_note">Редагувати нотатку</string>
+    <string name="delete_note">Видалити нотатку</string>
+</resources>
