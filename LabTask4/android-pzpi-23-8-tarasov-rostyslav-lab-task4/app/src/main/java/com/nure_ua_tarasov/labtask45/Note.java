@@ -1,39 +1,36 @@
 package com.nure_ua_tarasov.labtask45;
-
-import java.util.Date;
+package com.example.noteapp;
 
 public class Note {
+    private int id;
     private String title;
     private String description;
-    private Importance importance;
-    private Date timestamp;
-    private String imageUri;
-    private long id; // For uniquely identifying notes
+    private String importance;
+    private String dateTime;
+    private String imagePath;
 
-    public enum Importance {
-        LOW,
-        MEDIUM,
-        HIGH
+    public Note() {
     }
 
-    public Note(String title, String description, Importance importance, String imageUri) {
+    public Note(int id, String title, String description, String importance, String dateTime, String imagePath) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.importance = importance;
-        this.imageUri = imageUri;
-        this.timestamp = new Date();
-        this.id = System.currentTimeMillis(); // Simple way to generate unique IDs
+        this.dateTime = dateTime;
+        this.imagePath = imagePath;
     }
 
-    // Getters and setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
-    public Importance getImportance() { return importance; }
-    public void setImportance(Importance importance) { this.importance = importance; }
-    public Date getTimestamp() { return timestamp; }
-    public String getImageUri() { return imageUri; }
-    public void setImageUri(String imageUri) { this.imageUri = imageUri; }
-    public long getId() { return id; }
+    public String getImportance() { return importance; }
+    public void setImportance(String importance) { this.importance = importance; }
+    public String getDateTime() { return dateTime; }
+    public void setDateTime(String dateTime) { this.dateTime = dateTime; }
+    public String getImagePath() { return imagePath; }
+    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
 }

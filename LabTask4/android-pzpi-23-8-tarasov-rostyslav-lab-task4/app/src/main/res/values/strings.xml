@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- English -->
-    <string name="app_name">Notes</string>
-    <string name="add_note">Add note</string>
-    <string name="note_image">Note image</string>
-    <string name="priority_icon">Priority icon</string>
-    <string name="search_notes">Search notes</string>
-    <string name="filter_priority">Filter by priority</string>
+    <string name="app_name">NoteTakingApp</string>
+    <string name="notes_title">Notes</string>
+    <string name="add_note">Add Note</string>
+    <string name="search_note">Search Notes</string>
+    <string name="note_title">Note Title</string>
+    <string name="note_description">Note Description</string>
+    <string name="add_note_title">Add Note</string>
+    <string name="edit_note_title">Edit Note</string>
+    <string name="select_image">Select Image</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="search_hint">Search notes…</string>
+    <string name="filter_notes">Filter Notes</string>
+    <string name="filter_title_hint">Filter by Title</string>
+    <string name="filter_description_hint">Filter by Description</string>
+    <string name="importance_filter_options">All,High,Medium,Low</string>
+    <string name="delete_note_title">Delete</string>
+    <string name="delete_note_message">Are you sure to delete note?</string>
     <string name="edit_note">Edit note</string>
     <string name="delete_note">Delete note</string>
+    <string-array name="importance_filter_options">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+    </string-array>
 </resources>
