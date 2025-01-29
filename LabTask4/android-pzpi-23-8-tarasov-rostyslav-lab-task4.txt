@@ -1,0 +1,328 @@
+﻿МІНІСТЕРСТВО ОСВІТИ ТА НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ
+РАДІОЕЛЕКТРОНІКИ
+
+
+
+
+ЗВІТ
+Лабораторної роботи №4
+з дисципліни «Програмування під Android»
+на тему «Розроблення застосунку для ведення нотаток»
+
+
+Виконав:
+Тарасов Ростислав МаксимовичПеревірив:
+ст. викладач кафедри ПІ
+Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+Харків 2024
+
+1.1  Мета роботи
+     Розробити повноцінний додаток для ведення нотаток з функціями пошуку і фільтрації.
+     
+1.2  Завдання
+      Розробити застосунок для ведення нотаток.
+      Застосунок повинен дозволяти переглядати список нотаток, створювати нову нотатку, редагувати нотатку та видаляти нотатку. Кожна нотатка повинна мати назву, опис, важливість (три класи), час і дату призначення і картинку (вибирається з галереї).
+      У списку нотатки відображаються з іконкою з галереї і часом створення (праворуч зверху більш дрібним шрифтом), а також графічним відображенням класу важливості (іконка з множини).
+      Потрібно реалізувати функції додавання, видалення, редагування (без збереження між перезапуск додатку) нотаток.
+      Видалення/редагування викликаються з контекстного меню при довгому натисненні, додавання - з основного меню в ActionBar. У ActionBar реалізувати пошук / фільтрація заміток за змістом тексту, а також фільтрацію за важливістю. Текстові елементи користувацького інтерфейсу повинні бути локалізовані українською та англійською мовами.
+      
+1.3  Хід роботи
+     Створюємо проект із порожнім шаблоном.
+     Далі почергово створюємо класи і ресурси.
+     MainActivity: головний інтерфейс додатка, в якому видно усі нотатки у RecycleView, тобто налаштований список для відображення нотаток. Також зверху ActionBar з потрібним функціоналом. В класі цього актівіті реалізоване додавання, видалення і редагування нотаток і їх сортування, фільтрація і пошук. 
+     AddEditNoteActivity: інтерфейс для додавання і редагування нотаток а також програмна реалізація методів в класі.
+     NoteAdapter: адаптер для RecycleView, відповідальний за відображення списку нотаток.
+     ic_*.xml: іконки для інтерфейсу, такі як: іконки важливості, пошуку, фільтрації і додавання.
+     strings.xml: локалізація для додатку.
+     
+1.4  Висновки
+     У результаті лабораторної роботи створено функціональний Android-додаток для ведення нотаток із підтримкою створення, редагування, видалення, пошуку та фільтрації. Використано RecyclerView для списку, NoteAdapter для відображення, AddEditNoteActivity для керування нотатками. Додаток підтримує локалізацію українською та англійською мовами, має інтуїтивний інтерфейс і відповідає стандартам Material Design.
+     
+
+
+     Додаток А
+Розмітка
+     activity_main.xml:
+       1. <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+       2.     xmlns:tools="http://schemas.android.com/tools"
+       3.     android:id="@+id/main"
+       4.     android:layout_width="match_parent"
+       5.     android:layout_height="match_parent"
+       6.     android:orientation="vertical"
+       7.     tools:context=".MainActivity">
+       8.
+       9.     <androidx.recyclerview.widget.RecyclerView
+       10.         android:id="@+id/recyclerViewNotes"
+       11.         android:layout_width="match_parent"
+       12.         android:layout_height="match_parent"
+       13.         android:clipToPadding="false"
+       14.         android:padding="16dp" />
+       15. </LinearLayout>
+       16.
+     menu_main.xml
+       1. <?xml version="1.0" encoding="utf-8"?>
+       2. <menu xmlns:android="http://schemas.android.com/apk/res/android"
+       3.     xmlns:app="http://schemas.android.com/apk/res-auto">
+       4. 
+       5.     <item
+       6.         android:id="@+id/menu_add"
+       7.         android:title="@string/add_note"
+       8.         android:icon="@drawable/ic_add"
+       9.         app:showAsAction="always" />
+       10. 
+       11.     <item
+       12.         android:id="@+id/menu_search"
+       13.         android:title="@string/search_note"
+       14.         android:icon="@drawable/ic_search"
+       15.         app:actionViewClass="android.widget.SearchView"
+       16.         app:showAsAction="ifRoom" />
+       17. 
+       18.     <item
+       19.         android:id="@+id/menu_filter"
+       20.         android:title="@string/filter_notes"
+       21.         android:icon="@drawable/ic_filter"
+       22.         app:showAsAction="always" />
+       23. </menu>
+       24.
+     item_note.xml
+       1. <?xml version="1.0" encoding="utf-8"?>
+       2. <LinearLayout
+       3.     xmlns:android="http://schemas.android.com/apk/res/android"
+       4.     android:layout_width="match_parent"
+       5.     android:layout_height="wrap_content"
+       6.     android:orientation="horizontal"
+       7.     android:padding="8dp"
+       8.     android:gravity="center_vertical">
+       9. 
+       10.     <ImageView
+       11.         android:id="@+id/note_importance_icon"
+       12.         android:layout_width="24dp"
+       13.         android:layout_height="24dp"
+       14.         android:layout_marginEnd="8dp" />
+       15. 
+       16.     <LinearLayout
+       17.         android:layout_width="0dp"
+       18.         android:layout_height="wrap_content"
+       19.         android:orientation="vertical"
+       20.         android:layout_weight="1">
+       21. 
+       22.         <TextView
+       23.             android:id="@+id/note_title"
+       24.             android:layout_width="wrap_content"
+       25.             android:layout_height="wrap_content"
+       26.             android:textSize="16sp"
+       27.             android:textStyle="bold" />
+       28. 
+       29.         <TextView
+       30.             android:id="@+id/note_date_time"
+       31.             android:layout_width="wrap_content"
+       32.             android:layout_height="wrap_content"
+       33.             android:textSize="12sp"
+       34.             android:textColor="#888888" />
+       35.     </LinearLayout>
+       36. </LinearLayout>
+       37.
+
+
+     Додаток Б
+Вихідний код
+     MainActivity.java
+       1. package com.nure_ua_tarasov.labtask45;
+       2. 
+       3. import android.content.Intent;
+       4. import android.net.Uri;
+       5. import android.os.Bundle;
+       6. import android.provider.MediaStore;
+       7. import android.view.LayoutInflater;
+       8. import android.view.Menu;
+       9. import android.view.MenuItem;
+       10. import android.view.View;
+       11. import android.widget.Button;
+       12. import android.widget.EditText;
+       13. import android.widget.ImageView;
+       14. import android.widget.Spinner;
+       15. 
+       16. import androidx.annotation.NonNull;
+       17. import androidx.annotation.Nullable;
+       18. import androidx.appcompat.app.AlertDialog;
+       19. import androidx.appcompat.app.AppCompatActivity;
+       20. import androidx.appcompat.widget.SearchView;
+       21. import androidx.recyclerview.widget.LinearLayoutManager;
+       22. import androidx.recyclerview.widget.RecyclerView;
+       23. 
+       24. import java.util.ArrayList;
+       25. import java.util.List;
+       26. import java.util.Objects;
+       27. 
+       28. public class MainActivity extends AppCompatActivity {
+       29.     private static final int REQUEST_IMAGE_PICK = 1;
+       30.     private Uri selectedImageUri;
+       31.     private RecyclerView recyclerView;
+       32.     private NoteAdapter adapter;
+       33.     private List<Note> notes;
+       34.     private EditText searchView;
+       35. 
+       36.     @Override
+       37.     protected void onCreate(Bundle savedInstanceState) {
+       38.         super.onCreate(savedInstanceState);
+       39.         setContentView(R.layout.activity_main);
+       40. 
+       41.         notes = new ArrayList<>();
+       42.         recyclerView = findViewById(R.id.recyclerViewNotes);
+       43.         adapter = new NoteAdapter(notes, this);
+       44. 
+       45.         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+       46.         recyclerView.setAdapter(adapter);
+       47. 
+       48.         setupActionBar();
+       49.     }
+       50. 
+       51.     private void setupActionBar() {
+       52.         Objects.requireNonNull(getSupportActionBar()).setTitle("Title");
+       53.     }
+       54. 
+       55.     @Override
+       56.     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+       57.         if (item.getItemId() == R.id.menu_add) {
+       58.             showNoteDialog(null, -1);
+       59.             return true;
+       60.         } else if (item.getItemId() == R.id.menu_filter) {
+       61.             showFilterDialog();
+       62.             return true;
+       63.         }
+       64.         return super.onOptionsItemSelected(item);
+       65.     }
+       66. 
+       67.     private void showFilterDialog() {
+       68.         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_filter_notes, null);
+       69.         EditText inputFilterTitle = dialogView.findViewById(R.id.inputFilterTitle);
+       70.         EditText inputFilterDescription = dialogView.findViewById(R.id.inputFilterDescription);
+       71.         Spinner spinnerFilterImportance = dialogView.findViewById(R.id.spinnerFilterImportance);
+       72. 
+       73.         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+       74.         builder.setView(dialogView);
+       75.         builder.setTitle(R.string.filter_notes);
+       76.         builder.setPositiveButton(R.string.ok, (dialog, which) -> {
+       77.             String filterTitle = inputFilterTitle.getText().toString().toLowerCase();
+       78.             String filterDescription = inputFilterDescription.getText().toString().toLowerCase();
+       79.             String filterImportance = spinnerFilterImportance.getSelectedItem().toString();
+       80. 
+       81.             adapter.filterByMultipleCriteria(filterTitle, filterDescription, filterImportance.equals("All") ? null : filterImportance);
+       82.         });
+       83.         builder.setNegativeButton(R.string.cancel, null);
+       84.         builder.create().show();
+       85.     }
+       86. 
+       87.     @Override
+       88.     public boolean onCreateOptionsMenu(Menu menu) {
+       89.         getMenuInflater().inflate(R.menu.menu_main, menu);
+       90. 
+       91.         // Search functionality
+       92.         MenuItem searchItem = menu.findItem(R.id.menu_search);
+       93.         SearchView searchView = (SearchView) searchItem.getActionView();
+       94. 
+       95.         assert searchView != null;
+       96.         searchView.setQueryHint(getString(R.string.search_hint));
+       97.         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+       98.             @Override
+       99.             public boolean onQueryTextSubmit(String query) {
+       100.                 adapter.filter(query);
+       101.                 return true;
+       102.             }
+       103. 
+       104.             @Override
+       105.             public boolean onQueryTextChange(String newText) {
+       106.                 adapter.filter(newText);
+       107.                 return true;
+       108.             }
+       109.         });
+       110. 
+       111.         return true;
+       112.     }
+       113. 
+       114.     void showNoteDialog(Note noteToEdit, int position) {
+       115.         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_note, null);
+       116.         EditText inputTitle = dialogView.findViewById(R.id.inputNoteTitle);
+       117.         EditText inputDescription = dialogView.findViewById(R.id.inputNoteDescription);
+       118.         Spinner spinnerImportance = dialogView.findViewById(R.id.spinnerImportance);
+       119.         Button buttonSelectImage = dialogView.findViewById(R.id.buttonSelectImage);
+       120.         ImageView imagePreview = dialogView.findViewById(R.id.imagePreview);
+       121. 
+       122.         if (noteToEdit != null) {
+       123.             inputTitle.setText(noteToEdit.getTitle());
+       124.             inputDescription.setText(noteToEdit.getDescription());
+       125.             selectedImageUri = Uri.parse(noteToEdit.getImageUri());
+       126.             imagePreview.setImageURI(selectedImageUri);
+       127.         }
+       128. 
+       129.         buttonSelectImage.setOnClickListener(v -> {
+       130.             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+       131.             startActivityForResult(intent, REQUEST_IMAGE_PICK);
+       132.         });
+       133. 
+       134.         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+       135.         builder.setView(dialogView);
+       136.         builder.setTitle(noteToEdit == null ? R.string.add_note_title : R.string.edit_note_title);
+       137.         builder.setPositiveButton(R.string.ok, (dialog, which) -> {
+       138.             String title = inputTitle.getText().toString();
+       139.             String description = inputDescription.getText().toString();
+       140.             String importance = spinnerImportance.getSelectedItem().toString();
+       141.             String timestamp = String.valueOf(System.currentTimeMillis());
+       142.             String imageUri = selectedImageUri != null ? selectedImageUri.toString() : null;
+       143. 
+       144.             Note note = new Note(title, description, importance, timestamp, imageUri);
+       145.             if (position >= 0) {
+       146.                 notes.set(position, note);
+       147.             } else {
+       148.                 notes.add(note);
+       149.             }
+       150.             adapter.notifyDataSetChanged();
+       151.         });
+       152.         builder.setNegativeButton(R.string.cancel, null);
+       153.         builder.create().show();
+       154.     }
+       155. 
+       156.     @Override
+       157.     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+       158.         super.onActivityResult(requestCode, resultCode, data);
+       159.         if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
+       160.             selectedImageUri = data.getData();
+       161.         }
+       162.     }
+       163. 
+       164.     public void showDeleteConfirmDialog(int position) {
+       165.         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+       166.         builder.setTitle(R.string.delete_note_title);
+       167.         builder.setMessage(R.string.delete_note_message);
+       168.         builder.setPositiveButton(R.string.ok, (dialog, which) -> {
+       169.             notes.remove(position);
+       170.             adapter.notifyDataSetChanged();
+       171.         });
+       172.         builder.setNegativeButton(R.string.cancel, null);
+       173.         builder.create().show();
+       174.     }
+       175. 
+       176. }
+       177.
+
+
+2
+
+
+
+
+
+
+
+
+
+
