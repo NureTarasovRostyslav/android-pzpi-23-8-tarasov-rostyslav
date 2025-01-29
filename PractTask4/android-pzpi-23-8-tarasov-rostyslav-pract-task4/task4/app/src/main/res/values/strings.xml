@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SensorApp</string>
+    <string-array name="sensors_array">
+        <item>Accelerometer</item>
+        <item>Gyroscope</item>
+        <item>Magnetometer</item>
+    </string-array>
+</resources>
